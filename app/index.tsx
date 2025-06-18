@@ -1,35 +1,17 @@
-import { View, FlatList, StyleSheet, useWindowDimensions } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Appbar, Card, FAB, Text } from 'react-native-paper';
 import { Image } from 'expo-image';
-
-const places = [
-    {
-        id: '1',
-        title: 'Rynek',
-        description: 'Historyczne centrum Kielc, otoczone zabytkowymi kamienicami. ' +
-            'Znajduje się tu zabytkowy ratusz z XIX wieku oraz liczne restauracje i kawiarnie. ' +
-            'Miejsce spotkań mieszkańców i centrum wydarzeń kulturalnych miasta.',
-    },
-    {
-        id: '2',
-        title: 'Ulica Sienkiewicza',
-        description: 'Główny deptak Kielc i jedna z najważniejszych ulic handlowych miasta. ' +
-            'Wyłączona z ruchu kołowego promenada z licznymi sklepami, kawiarniami i restauracjami. ' +
-            'Charakterystyczna zabudowa z przełomu XIX i XX wieku.',
-    },
-    {
-        id: '3',
-        title: 'Kadzielnia',
-        description: 'Dawny kamieniołom przekształcony w rezerwat przyrody nieożywionej. ' +
-            'Znajduje się tu amfiteatr, w którym organizowane są koncerty i wydarzenia kulturalne. ' +
-            'Popularne miejsce rekreacji z malowniczymi ścieżkami i punktami widokowymi.',
-    }
-];
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Avatar, Button, Card, ProgressBar, Text } from 'react-native-paper';
 
 export default function HomeScreen() {
     const router = useRouter();
-    const { width, height } = useWindowDimensions();
+
+    // Przykładowe dane dnia
+    const steps = 7421;
+    const stepsGoal = 10000;
+    const activityMinutes = 42;
+    const mood = "😊 Bardzo dobrze";
 
     const styles = StyleSheet.create({
         container: {
@@ -44,67 +26,80 @@ export default function HomeScreen() {
             bottom: 0,
             width: '100%',
             height: '100%',
-            opacity: 0.5,
+            opacity: 0.15,
         },
-        header: {
-            backgroundColor: 'transparent',
-            elevation: 0,
-        },
-        headerContent: {
-            color: 'black',
-            fontWeight: 'bold',
+        content: {
+            flex: 1,
+            padding: 16,
+            zIndex: 1,
         },
         card: {
-            marginBottom: 10,
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            backgroundColor: 'rgba(255,255,255,0.95)',
+            marginBottom: 16,
         },
-        fab: {
-            position: 'absolute',
-            right: 16,
-            bottom: 16,
+        centeredTitle: {
+            width: '100%',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: 22,
+            color: 'black',
+            marginVertical: 12,
+        },
+        moodRow: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 8,
+        },
+        addButton: {
             backgroundColor: '#4CAF50',
+            marginTop: 24,
+            alignSelf: 'center',
+            width: '100%',
         }
     });
 
     return (
         <View style={styles.container}>
             <Image
-                source={require('../assets/images/kielce.png')}
+                source={require('../assets/images/home-background.png')}
                 style={styles.backgroundImage}
                 contentFit="cover"
                 contentPosition="center"
             />
-            <Appbar.Header style={styles.header}>
-                <Appbar.Content
-                    title="City Explorer Kielce"
-                    titleStyle={styles.headerContent}
-                />
-            </Appbar.Header>
-            <FlatList
-                data={places}
-                keyExtractor={(item) => item.id}
-                contentContainerStyle={{ padding: 10 }}
-                renderItem={({ item }) => (
-                    <Card
-                        style={styles.card}
-                        onPress={() => router.push({
-                            pathname: '/details',
-                            params: { id: item.id }
-                        })}
-                    >
-                        <Card.Title
-                            title={item.title}
-                            titleStyle={{ color: 'black' }}
-                        />
-                    </Card>
-                )}
-            />
-            <FAB
-                icon="plus"
-                label="Dodaj miejsce"
-                style={styles.fab}
-                onPress={() => router.push('/edit')}
-            />
+            <Text style={styles.centeredTitle}>Podsumowanie dnia</Text>
+            <View style={styles.content}>
+                <Card style={styles.card}>
+                    <Card.Title title="Kroki" left={props => <Avatar.Icon {...props} icon="walk" color="#4CAF50" />} />
+                    <Card.Content>
+                        <Text variant="headlineMedium">{steps} / {stepsGoal}</Text>
+                        <ProgressBar progress={steps / stepsGoal} color="#4CAF50" style={{ marginTop: 8 }} />
+                        <Text variant="bodySmall" style={{ marginTop: 4 }}>Cel: {stepsGoal} kroków</Text>
+                    </Card.Content>
+                </Card>
+                <Card style={styles.card}>
+                    <Card.Title title="Aktywność fizyczna" left={props => <Avatar.Icon {...props} icon="run" color="#4CAF50" />} />
+                    <Card.Content>
+                        <Text variant="headlineMedium">{activityMinutes} min</Text>
+                        <Text variant="bodySmall" style={{ marginTop: 4 }}>Dzienny cel: 30 min</Text>
+                    </Card.Content>
+                </Card>
+                <Card style={styles.card}>
+                    <Card.Title title="Samopoczucie" left={props => <Avatar.Icon {...props} icon="emoticon-happy-outline" color="#4CAF50" />} />
+                    <Card.Content>
+                        <View style={styles.moodRow}>
+                            <Text variant="headlineMedium">{mood}</Text>
+                        </View>
+                    </Card.Content>
+                </Card>
+                <Button
+                    icon="plus"
+                    mode="contained"
+                    style={styles.addButton}
+                    onPress={() => router.push('/edit')}
+                >
+                    Dodaj aktywność
+                </Button>
+            </View>
         </View>
     );
 }

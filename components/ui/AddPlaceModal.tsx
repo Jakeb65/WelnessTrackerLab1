@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
     Modal,
-    View,
-    Text,
-    TextInput,
     Pressable,
     StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from 'react-native';
 
 interface AddPlaceModalProps {
@@ -15,10 +15,10 @@ interface AddPlaceModalProps {
 }
 
 const AddPlaceModal: React.FC<AddPlaceModalProps> = ({ visible, onClose, onSave }) => {
-    const [name, setName] = useState('');
-    const [city, setCity] = useState('');
-    const [description, setDescription] = useState('');
-    const [imageName, setImageName] = useState('');
+    const [name, setName] = useState<string>('');
+    const [city, setCity] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [imageName, setImageName] = useState<string>('');
 
     const handleSave = () => {
         onSave(name, city, description, imageName);
@@ -32,51 +32,49 @@ const AddPlaceModal: React.FC<AddPlaceModalProps> = ({ visible, onClose, onSave 
     return (
         <Modal
             visible={visible}
-    transparent
-    animationType="slide"
-    onRequestClose={onClose}
-    >
-    <View style={styles.overlay}>
-    <View style={styles.modal}>
-    <Text style={styles.title}>Dodaj nowe miejsce</Text>
-
-    <TextInput
-    placeholder="np. Rynek"
-    style={styles.input}
-    value={name}
-    onChangeText={setName}
-    />
-    <TextInput
-    placeholder="np. Kraków"
-    style={styles.input}
-    value={city}
-    onChangeText={setCity}
-    />
-    <TextInput
-    placeholder="np. Historyczne centrum..."
-    style={styles.input}
-    value={description}
-    onChangeText={setDescription}
-    />
-    <TextInput
-    placeholder="np. krakow"
-    style={styles.input}
-    value={imageName}
-    onChangeText={setImageName}
-    />
-
-    <View style={styles.buttonRow}>
-    <Pressable onPress={onClose} style={styles.buttonCancel}>
-    <Text style={styles.buttonText}>Wróć</Text>
-        </Pressable>
-        <Pressable onPress={handleSave} style={styles.buttonSave}>
-    <Text style={styles.buttonText}>Zapisz</Text>
-        </Pressable>
-        </View>
-        </View>
-        </View>
+            transparent
+            animationType="slide"
+            onRequestClose={onClose}
+        >
+            <View style={styles.overlay}>
+                <View style={styles.modal}>
+                    <Text style={styles.title}>Dodaj nowe miejsce</Text>
+                    <TextInput
+                        placeholder="np. Rynek"
+                        style={styles.input}
+                        value={name}
+                        onChangeText={setName}
+                    />
+                    <TextInput
+                        placeholder="np. Kraków"
+                        style={styles.input}
+                        value={city}
+                        onChangeText={setCity}
+                    />
+                    <TextInput
+                        placeholder="np. Historyczne centrum..."
+                        style={styles.input}
+                        value={description}
+                        onChangeText={setDescription}
+                    />
+                    <TextInput
+                        placeholder="np. krakow"
+                        style={styles.input}
+                        value={imageName}
+                        onChangeText={setImageName}
+                    />
+                    <View style={styles.buttonRow}>
+                        <Pressable onPress={onClose} style={styles.buttonCancel}>
+                            <Text style={[styles.buttonText, { color: '#333' }]}>Wróć</Text>
+                        </Pressable>
+                        <Pressable onPress={handleSave} style={styles.buttonSave}>
+                            <Text style={styles.buttonText}>Zapisz</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </View>
         </Modal>
-);
+    );
 };
 
 const styles = StyleSheet.create({
@@ -97,6 +95,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '600',
         marginBottom: 15,
+        textAlign: 'center',
     },
     input: {
         borderWidth: 1,
