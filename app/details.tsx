@@ -1,16 +1,30 @@
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
-import { Appbar, Avatar, Button, Card, ProgressBar, Text } from 'react-native-paper';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Appbar, Avatar, Button, Card, List, ProgressBar, Text } from 'react-native-paper';
+import AddPlaceModal from '../components/ui/AddPlaceModal';
 
-export default function DashboardScreen() {
+const stepsGoal = 10000;
+
+export default function HomeScreen() {
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const router = useRouter();
 
     // Przykładowe dane dnia
     const steps = 7421;
-    const stepsGoal = 10000;
     const activityMinutes = 42;
     const mood = "😊 Bardzo dobrze";
+    const exercises = [
+        "Bieganie – 20 min",
+        "Pompki – 3 serie",
+        "Joga – 15 min"
+    ];
+
+    const handleSavePlace = (name, city, description, imageName) => {
+        console.log('Zapisane miejsce:', { name, city, description, imageName });
+        setIsModalVisible(false);
+    };
 
     const styles = StyleSheet.create({
         container: {
@@ -56,6 +70,19 @@ export default function DashboardScreen() {
         addButton: {
             marginTop: 24,
             backgroundColor: '#4CAF50',
+        },
+        addButtonContainer: {
+            backgroundColor: '#4CAF50',
+            padding: 14,
+            borderRadius: 8,
+            marginBottom: 10,
+            alignItems: 'center',
+            elevation: 3,
+        },
+        addButtonText: {
+            color: '#fff',
+            fontSize: 16,
+            fontWeight: '500',
         }
     });
 
@@ -70,7 +97,7 @@ export default function DashboardScreen() {
             <Appbar.Header style={styles.header}>
                 <Appbar.Content title="Podsumowanie dnia" titleStyle={styles.headerContent} />
             </Appbar.Header>
-            <View style={styles.content}>
+            <ScrollView style={styles.content} contentContainerStyle={{ paddingBottom: 32 }}>
                 <Card style={styles.card}>
                     <Card.Title title="Kroki" left={props => <Avatar.Icon {...props} icon="walk" color="#4CAF50" />} />
                     <Card.Content>
@@ -86,6 +113,24 @@ export default function DashboardScreen() {
                         <Text variant="bodySmall" style={{ marginTop: 4 }}>Dzienny cel: 30 min</Text>
                     </Card.Content>
                 </Card>
+                {}
+                <Card style={styles.card}>
+                    <Card.Title title="Ćwiczenia" left={props => <Avatar.Icon {...props} icon="dumbbell" color="#4CAF50" />} />
+                    <Card.Content>
+                        {exercises.length === 0 ? (
+                            <Text variant="bodyMedium">Brak ćwiczeń</Text>
+                        ) : (
+                            exercises.map((exercise, idx) => (
+                                <List.Item
+                                    key={idx}
+                                    title={exercise}
+                                    left={props => <List.Icon {...props} icon="check-circle-outline" color="#4CAF50" />}
+                                    style={{ paddingVertical: 0 }}
+                                />
+                            ))
+                        )}
+                    </Card.Content>
+                </Card>
                 <Card style={styles.card}>
                     <Card.Title title="Samopoczucie" left={props => <Avatar.Icon {...props} icon="emoticon-happy-outline" color="#4CAF50" />} />
                     <Card.Content>
@@ -98,11 +143,28 @@ export default function DashboardScreen() {
                     icon="plus"
                     mode="contained"
                     style={styles.addButton}
-                    onPress={() => router.push('/edit')}
+                    onPress={() =>
+                        router.push({
+                            pathname: '/edit',
+                            params: {
+                                steps,
+                                activityMinutes,
+                                mood,
+                                exercises: JSON.stringify(exercises)
+                            }
+                        })
+                    }
                 >
-                    Dodaj aktywność
+                    Edytuj aktywność
                 </Button>
-            </View>
+
+                {}
+                <AddPlaceModal
+                    visible={isModalVisible}
+                    onClose={() => setIsModalVisible(false)}
+                    onSave={handleSavePlace}
+                />
+            </ScrollView>
         </View>
     );
 }

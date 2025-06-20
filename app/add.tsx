@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 import { Appbar, Button, Chip, IconButton, Text, TextInput } from 'react-native-paper';
 
-export default function EditScreen() {
+export default function AddScreen() {
     const router = useRouter();
     const params = useLocalSearchParams();
 
@@ -145,7 +145,7 @@ export default function EditScreen() {
             />
             <Appbar.Header style={styles.header}>
                 <Appbar.BackAction onPress={() => router.back()} color="black" />
-                <Appbar.Content title="Edytuj aktywność" titleStyle={styles.headerContent} />
+                <Appbar.Content title="Dodaj aktywność" titleStyle={styles.headerContent} />
             </Appbar.Header>
             <View style={styles.content}>
                 <Text style={styles.label}>Kroki</Text>

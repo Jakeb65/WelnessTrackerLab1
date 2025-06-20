@@ -156,7 +156,7 @@ export default function EditScreen() {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalText}>
-                            {errorMessage ? errorMessage : 'Dodano aktywność!'}
+                            {errorMessage ? errorMessage : 'Zapisano zmiany!'}
                         </Text>
                         <Button mode="contained" onPress={handleModalClose}>
                             OK
