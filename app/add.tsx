@@ -8,7 +8,6 @@ export default function AddScreen() {
     const router = useRouter();
     const params = useLocalSearchParams();
 
-    // Pobierz dane z parametrów lub ustaw domyślne
     const [steps, setSteps] = useState(params.steps?.toString() || '');
     const [activityMinutes, setActivityMinutes] = useState(params.activityMinutes?.toString() || '');
     const [mood, setMood] = useState(params.mood?.toString() || '');

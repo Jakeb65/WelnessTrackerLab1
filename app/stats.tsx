@@ -9,7 +9,7 @@ const monthData = {
     stepsGoal: 300000,
     activity: 1240,
     activityGoal: 1800,
-    mood: 76, // średnie samopoczucie w procentach
+    mood: 76,
     moodGoal: 80,
 };
 

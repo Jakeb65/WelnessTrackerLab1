@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Modal, ScrollView, StyleSheet, View } from 'react-native';
 import { Appbar, Avatar, Button, Card, List, ProgressBar, Text } from 'react-native-paper';
 import AddPlaceModal from '../components/ui/AddPlaceModal';
 
@@ -9,9 +9,9 @@ const stepsGoal = 10000;
 
 export default function HomeScreen() {
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const router = useRouter();
 
-    // Przykładowe dane dnia
     const steps = 7421;
     const activityMinutes = 42;
     const mood = "😊 Bardzo dobrze";
@@ -83,7 +83,39 @@ export default function HomeScreen() {
             color: '#fff',
             fontSize: 16,
             fontWeight: '500',
-        }
+        },
+        centeredView: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 22,
+            backgroundColor: 'rgba(0,0,0,0.4)', // <-- dodane wyszarzenie tła
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 10,
+        },
+        modalView: {
+            margin: 20,
+            backgroundColor: 'white',
+            borderRadius: 20,
+            padding: 35,
+            alignItems: 'center',
+            shadowColor: '#000',
+            shadowOffset: {
+                width: 0,
+                height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5,
+        },
+        modalText: {
+            marginBottom: 15,
+            textAlign: 'center',
+        },
     });
 
     return (
@@ -95,6 +127,7 @@ export default function HomeScreen() {
                 contentPosition="center"
             />
             <Appbar.Header style={styles.header}>
+                <Appbar.BackAction onPress={() => router.back()} color="black" />
                 <Appbar.Content title="Podsumowanie dnia" titleStyle={styles.headerContent} />
             </Appbar.Header>
             <ScrollView style={styles.content} contentContainerStyle={{ paddingBottom: 32 }}>
@@ -113,7 +146,6 @@ export default function HomeScreen() {
                         <Text variant="bodySmall" style={{ marginTop: 4 }}>Dzienny cel: 30 min</Text>
                     </Card.Content>
                 </Card>
-                {}
                 <Card style={styles.card}>
                     <Card.Title title="Ćwiczenia" left={props => <Avatar.Icon {...props} icon="dumbbell" color="#4CAF50" />} />
                     <Card.Content>
@@ -157,14 +189,44 @@ export default function HomeScreen() {
                 >
                     Edytuj aktywność
                 </Button>
-
-                {}
+                <Button
+                    icon="delete"
+                    mode="contained"
+                    style={[styles.addButton, { backgroundColor: '#f44336', marginTop: 12 }]}
+                    onPress={() => setDeleteModalVisible(true)}
+                >
+                    Usuń aktywność
+                </Button>
                 <AddPlaceModal
                     visible={isModalVisible}
                     onClose={() => setIsModalVisible(false)}
                     onSave={handleSavePlace}
                 />
             </ScrollView>
+            {/* MODAL usuwania */}
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={deleteModalVisible}
+                onRequestClose={() => setDeleteModalVisible(false)}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>
+                            Aktywność została usunięta!
+                        </Text>
+                        <Button
+                            mode="contained"
+                            onPress={() => {
+                                setDeleteModalVisible(false);
+                                router.back();
+                            }}
+                        >
+                            OK
+                        </Button>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 }

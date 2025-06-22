@@ -3,7 +3,6 @@ import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Appbar, Button, Card, ProgressBar, Text } from 'react-native-paper';
 
-// Przykładowe dane do wyświetlenia
 const daysData = [
     {
         date: '2024-06-20',
@@ -132,7 +131,13 @@ export default function HomeScreen() {
     return (
         <View style={{ flex: 1 }}>
             <Appbar style={styles.appbar}>
-                <Appbar.Content title="Dziennik aktywności" titleStyle={styles.appbarTitle} />
+                <Appbar.Content
+                    title={
+                        <View>
+                            <Text style={styles.appbarTitle}>WELLNESS TRACKER</Text>
+                        </View>
+                    }
+                />
             </Appbar>
             <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
                 {daysData.map((day, idx) => (
